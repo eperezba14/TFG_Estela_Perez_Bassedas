@@ -53,11 +53,11 @@ def writer_results_to_csv(results: list, results_directory_path):
     if not os.path.exists(directory_results):
         os.makedirs(directory_results)
 
-    # Se crea o modifica el archivo CSV con los resultados que se han ido obteniendo
+    # Se crea o modifica el archivo CSV con los resultados que se han ido obteniendo.
     with open(results_directory_path, "w", newline="") as archivo_csv:
         writer = csv.writer(archivo_csv)
         writer.writerow(
-            ["Nombre_estudiante", "Distancia", "Puntuación_referencia", "Puntuación_predicha"]
+            ["Nombre_estudiante", "Distancia", "Número de operaciones", "Puntuación_referencia", "Puntuación_predicha"]
         )
         for result in results:
             writer.writerow(result)
@@ -67,7 +67,7 @@ def create_table_html_for_compare_results(results_directory_path, table_director
 
     df = pd.read_csv(results_directory_path, sep=',', encoding="latin-1")
     df.to_html(table_directory_path, index=False, encoding="latin-1", header=True, table_id='tabla',
-               classes='table table-striped')
+               classes='table table-striped', justify='center')
 
     # Obtener el directorio actual
     current_directory = os.getcwd()
