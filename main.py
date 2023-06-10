@@ -47,13 +47,14 @@ def main(function_name, submissions_path, solution_path, student_evaluation, num
                 file_path = os.path.join(root, archive)                        # Obtenemos la ruta completa del archivo
                 student_name = get_student_name(file_path)                         # Obtenemos el nombre del estudiante
                 evaluation = students_evaluation.get(unidecode(student_name), '')  # Obtenemos nota del estudiante
+                print(student_name)
                 try:
                     ast_student = get_ast_student(file_path, function_name, student_name)
-                    distance, counters = calculate_distance(ast_student, ast_solution)
+                    distance, counters, dict_operations = calculate_distance(ast_student, ast_solution)
                     normalized_distance = normalized_tree_edit_distance(counters[0], counters[1], distance)
-                    results.append((student_name, distance, evaluation, normalized_distance))
+                    results.append((student_name, distance, dict_operations, evaluation, normalized_distance))
                 except Exception:
-                    results.append((student_name, "Error", evaluation, None))
+                    results.append((student_name, "Error", "Error", evaluation, None))
 
     writer_results_to_csv(results, results_directory_path)
     calculate_correlation(results_directory_path)
