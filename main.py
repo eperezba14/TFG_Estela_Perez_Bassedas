@@ -54,8 +54,9 @@ def main(function_name, submissions_path, solutions_directory_path, student_eval
                     information_distances = calculate_distance(ast_student, asts_solutions)
                     predicted_score, distance, dict_operations = normalized_tree_edit_distance(information_distances)
                     results.append((student_name, distance, dict_operations, predicted_score, evaluation))
-                except Exception:
+                except Exception as error:
                     results.append((student_name, "Error", "Error", evaluation, None))
+                    print("An error has occurred:", error)
 
     writer_results_to_csv(results, results_directory_path)
     calculate_correlation(results_directory_path)

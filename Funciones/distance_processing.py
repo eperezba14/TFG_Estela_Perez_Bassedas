@@ -12,7 +12,7 @@ def calculate_distance(ast_student, ast_solutions):
     for ast_solution in ast_solutions:
         zss_node_solution = convert_ast_to_zss_node(ast_solution, "ast_solution")
         counter_solution = count_nodes(zss_node_solution)
-        simple_d, operations = simple_distance(zss_node_student, zss_node_solution, return_operations=True)
+        simple_d, operations = simple_distance(zss_node_solution, zss_node_student, return_operations=True)
         dict_operations = num_of_operation(operations)
         zss_node_counter_solutions.append((simple_d, (counter_student, counter_solution), dict_operations))
     return zss_node_counter_solutions
