@@ -13,7 +13,7 @@ def get_students_evaluation(file_real_score_name, num_col_name, num_col_surname,
     sheet = doc.sheets[0]
     df_dict = {}
 
-    # Recorremos las filas de la hoja, si es la primera fila (encabezados) continuamos el siguiente ciclo, en cuanto la
+    # Recorre las filas de la hoja, si es la primera fila (encabezados) continuamos el siguiente ciclo, en cuanto la
     # fila no es nula recogemos los datos y los guardamos (nombre, nota manual y nombre estudiante)
     for i, row in enumerate(sheet.rows()):
         if i == 0:
@@ -57,7 +57,7 @@ def writer_results_to_csv(results: list, results_directory_path):
     with open(results_directory_path, "w", newline="") as archivo_csv:
         writer = csv.writer(archivo_csv)
         writer.writerow(
-            ["Nombre_estudiante", "Distancia", "Número de operaciones", "Puntuación_referencia", "Puntuación_predicha"]
+            ["Nombre_estudiante", "Distancia", "Número de operaciones", "Puntuación_predicha", "Puntuación_referencia"]
         )
         for result in results:
             writer.writerow(result)

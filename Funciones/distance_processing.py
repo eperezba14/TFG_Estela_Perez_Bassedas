@@ -3,24 +3,34 @@ from Funciones.ast_processing import convert_ast_to_zss_node
 
 
 # Convierte el AST del estudiante y el de la solución en un árbol ZSS, a más cuenta el número de nodos del árbol ZSS
-# tanto del estudiante como de la solución y retorna la distancia entre estos.
-def calculate_distance(ast_student, ast_solution):
+# tanto del estudiante como de las soluciones y retorna una lista con los resultados entre estos, por cada solución.
+def calculate_distance(ast_student, ast_solutions):
+    zss_node_counter_solutions = []
     zss_node_student = convert_ast_to_zss_node(ast_student, "ast_solution")
     counter_student = count_nodes(zss_node_student)
-    zss_node_solution = convert_ast_to_zss_node(ast_solution, "ast_student")
-    counter_solution = count_nodes(zss_node_solution)
-    simple_d, operations = simple_distance(zss_node_student, zss_node_solution, return_operations=True)
-    dict_operations = num_of_operation(operations)
-    print(dict_operations)
-    return simple_d, (counter_student, counter_solution), dict_operations
+
+    for ast_solution in ast_solutions:
+        zss_node_solution = convert_ast_to_zss_node(ast_solution, "ast_solution")
+        counter_solution = count_nodes(zss_node_solution)
+        simple_d, operations = simple_distance(zss_node_solution, zss_node_student, return_operations=True)
+        dict_operations = num_of_operation(operations)
+        zss_node_counter_solutions.append((simple_d, (counter_student, counter_solution), dict_operations))
+    return zss_node_counter_solutions
 
 
-# Calcula el número total de nodos en ambos árboles ZSS, normaliza la distancia con una disivión y finalmente retorna
-# la puntuación automática obtenida.
-def normalized_tree_edit_distance(counter_student, counter_solution, distance):
-    total_nodes = counter_student + counter_solution
-    normalized_dist = distance / total_nodes
-    return round((1 - normalized_dist) * 100, 2)
+# Recorre la lista llegada por argumento, normaliza la distancia con una división por cada una y finalmente retorna
+# mayor puntuación automática conseguida entre las soluciones o solución.
+def normalized_tree_edit_distance(information_distances):
+    final_predicted_score = (0, 0, 0)
+    for distance, counters, dict_operations in information_distances:
+        counter_student = counters[0]
+        counter_solution = counters[1]
+        total_nodes = counter_student + counter_solution
+        normalized_dist = distance / total_nodes
+        predicted_score = round((1 - normalized_dist) * 100, 2)
+        if final_predicted_score[0] < predicted_score:
+            final_predicted_score = (predicted_score, distance, dict_operations)
+    return final_predicted_score[0], final_predicted_score[1], final_predicted_score[2]
 
 
 # Inicializa el contador en 1 para contar el nodo actual y recorre los hijos del nodo actual y suma al contador los
